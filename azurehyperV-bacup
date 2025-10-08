@@ -1,0 +1,15 @@
+# Azure-specific variables
+$storageAccount = "yourstorageaccount"
+$storageKey = "yourstoragekey"
+$containerName = "hyperv-backups"
+
+# Existing script logic...
+foreach ($vm in $vms) {
+    # Export and compress as before...
+
+    # Upload to Azure Blob Storage
+    $blobName = "$vm-$date.7z"
+    $ctx = New-AzStorageContext -StorageAccountName $storageAccount -StorageAccountKey $storageKey
+    Set-AzStorageBlobContent -File $zipPath -Container $containerName -Blob $blobName -Context $ctx
+    Write-Host -ForegroundColor Cyan "$vm backup uploaded to Azure"
+}
